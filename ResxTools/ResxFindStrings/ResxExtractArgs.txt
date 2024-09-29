@@ -1,0 +1,13 @@
+# This is an example Program Args file
+# Each line in the Program Args file is treaded as a command line arg.
+# Comment (#) and blank lines are ignored.
+# End-of-Line comments are removed
+
+/src:..\..\APSW_5.16.0.47707.ResX # Source folder
+/out:Extracted.xml # XML To-Be-Translated list
+
+# List of the Resx identifieers to be translated
+CassetteIndexIDColon
+StopProcessing
+SolError.Apsw19.Short
+SolError.Apsw19.Long
