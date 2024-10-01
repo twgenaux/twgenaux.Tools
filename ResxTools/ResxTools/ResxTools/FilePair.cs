@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 // Copyright @ 2015-2023 Theron W. Genaux
 // See "ResX-Tools Readme.md" for license.
@@ -9,7 +6,7 @@ using System.Text;
 namespace tgenaux.ResxTools
 {
     /// <summary>
-    /// Associated files to be compared
+    /// Associated files
     /// </summary>
     public class FilePair : IComparable
     {

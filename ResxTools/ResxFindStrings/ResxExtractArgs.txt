@@ -3,7 +3,7 @@
 # Comment (#) and blank lines are ignored.
 # End-of-Line comments are removed
 
-/src:..\..\APSW_5.16.0.47707.ResX # Source folder
+/src:E:\APSW_5.16.0.47707.ResX # Source folder
 /out:Extracted.xml # XML To-Be-Translated list
 
 # List of the Resx identifieers to be translated

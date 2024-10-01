@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Resources;
 using System.Xml.Linq;
-using System.Text.RegularExpressions;
 
 // Copyright @ 2015-2023 Theron W. Genaux
 // See "ResX-Tools Readme.md" for license.

@@ -20,6 +20,8 @@ namespace ResxFindStrings
 
         static string TranslatedFilePattern = "*.??*.resx";
 
+        static FindResxFiles findResxFiles = new FindResxFiles() { AllResxFilePattern = "*.resx", TranslatedFilePattern = "*.??*.resx" };
+
         static void Main(string[] args)
         {
 
@@ -29,10 +31,12 @@ namespace ResxFindStrings
             }
             else 
             {
-                TBTs tBTs = new TBTs(); 
+                TBTs tBTs = new TBTs();
 
                 // Get list of all English Resx files under the root folder
                 List<string> englishFiles = FindAllEnglishResxFiles(new FileInfo(rootPathname).FullName);
+
+                //List<string> englishFiles = findResxFiles.FindAllEnglishResxFiles(new FileInfo(rootPathname).FullName);
 
                 foreach (var resxFile in englishFiles)
                 {
