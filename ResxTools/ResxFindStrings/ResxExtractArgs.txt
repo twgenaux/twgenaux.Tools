@@ -3,8 +3,14 @@
 # Comment (#) and blank lines are ignored.
 # End-of-Line comments are removed
 
-/lang:*.fr.resx # Extract French strings. Defaults to English
+/allfiles:*.resx      # File pattern for all Resx files
+/trans:*.??*.resx     # File pattern for Translated Resx files
+/lang:*.fr.resx # File pattern for a specific language
+/lang:*.ja.resx # File pattern for a specific language
+/lang:*.zh-CN.resx # File pattern for a specific language
+
 /src:E:\APSW_5.16.0.47707.ResX # Source folder
+
 /out:Extracted.xml # XML To-Be-Translated list
 
 # List of the Resx identifieers to be translated

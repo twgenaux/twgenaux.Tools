@@ -16,17 +16,7 @@ namespace ResxFindStrings
 
         static List<string> ProgramArgs = new List<string>();
 
-        static string AllResxFilePattern = "*.resx";
-
-        static string TranslatedFilePattern = "*.??*.resx";
-
-        static string EnglishFilePattern = string.Empty;
-
-        static FindResxFiles findResxFiles = new FindResxFiles()
-        {
-            AllResxFilePattern = "*.resx",
-            TranslatedFilePattern = "*.??*.resx", // FileBaseName.Code.resx, where Language Code has at least 2 characters
-        };
+        static FindResxFiles findResxFiles = new FindResxFiles();
 
         static void Main(string[] args)
         {
@@ -36,11 +26,7 @@ namespace ResxFindStrings
             }
             else 
             {
-                TBTs tBTs = new TBTs();
-
-                FindResxFiles findResxFiles = new FindResxFiles();
-                findResxFiles.EnglishFilePattern = EnglishFilePattern;
-
+                TBTs tBTs = new TBTs();                
 
                 // Get list of all English Resx files under the root folder
                 List<string> englishFiles = findResxFiles.FindAllEnglishResxFiles(new FileInfo(rootPathname).FullName);
@@ -136,6 +122,28 @@ namespace ResxFindStrings
                 {
                     // read list of search items from file and add to list of names
                 }
+                else if (programArg.IndexOf("/allfiles:", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                {
+                    var temp = programArg.Remove(0, "/allfiles:".Length);
+                    char[] trim = { '"' };
+                    temp.Trim(new char[] { '"' });
+
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        findResxFiles.AllResxFilePatterns.Add(temp);
+                    }
+                }
+                else if (programArg.IndexOf("/trans:", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                {
+                    var temp = programArg.Remove(0, "/trans:".Length);
+                    char[] trim = { '"' };
+                    temp.Trim(new char[] { '"' });
+
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        findResxFiles.TranslatedFilePatterns.Add(temp);
+                    }
+                }
                 else if (programArg.IndexOf("/lang:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
                     var temp = programArg.Remove(0, "/lang:".Length);
@@ -144,7 +152,7 @@ namespace ResxFindStrings
 
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        EnglishFilePattern = temp;
+                        findResxFiles.EnglishFilePatterns.Add(temp);
                     }
                 }
                 else if (programArg.IndexOf("/src:", StringComparison.CurrentCultureIgnoreCase) >= 0)
