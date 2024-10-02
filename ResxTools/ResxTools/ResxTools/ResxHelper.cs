@@ -20,8 +20,10 @@ namespace tgenaux.ResxTools
 
             DirectoryInfo di = new DirectoryInfo(path);
 
-            List<string> allFiles = ResxHelper.FindAllResxFiles(di.FullName);
-            List<string> transFiles = ResxHelper.FindAllResxFiles(di.FullName, SearchOption.AllDirectories, "*.??*.resx");
+            FindResxFiles findResxFiles = new FindResxFiles();
+
+            List<string> allFiles = findResxFiles.FindAllResxFiles(di.FullName);
+            List<string> transFiles = findResxFiles.FindAllResxFiles(di.FullName);
             List<string> englishFiles = allFiles.Except(transFiles).ToList();
 
             // Pair the English (root) files with each of their translations
@@ -38,6 +40,8 @@ namespace tgenaux.ResxTools
         {
             List<FilePair> pairedFiles = new List<FilePair>();
 
+            FindResxFiles findResxFiles = new FindResxFiles();
+
             FileInfo fi = new FileInfo(englishFilename);
 
             string name = fi.Name;
@@ -47,8 +51,7 @@ namespace tgenaux.ResxTools
             string target = name.Substring(0, name.Length - extension.Length);
             target = target.Replace("\\", "\\\\");
             target = target.Replace(".", "\\.");
-            string pattern = target + ".??*.resx";
-            List<string> relatedFiles = ResxHelper.FindAllResxFiles(folder.FullName, SearchOption.AllDirectories, pattern);
+            List<string> relatedFiles = findResxFiles.FindAllResxFiles(folder.FullName, SearchOption.AllDirectories);
 
             foreach (var relatedFile in relatedFiles)
             {
@@ -205,38 +208,6 @@ namespace tgenaux.ResxTools
         }
 
 
-
-        public static List<string> FindAllResxFiles(string root, SearchOption serchOption = SearchOption.AllDirectories, string pattern = "*.resx")
-        {
-            List<string> found = new List<string>();
-
-            DirectoryInfo sourceDir = new DirectoryInfo(root);
-            FileInfo[] files = sourceDir.GetFiles(pattern, serchOption);  //Get only files which you need to work with.
-            foreach (var file in files)
-            {
-                string filename = file.FullName;
-                found.Add(filename);
-            }
-
-            found.Sort();
-
-            return found;
-        }
-
-        public static List<string> FindAllEnglishResxFiles(string root, SearchOption serchOption = SearchOption.AllDirectories, string pattern = "*.resx")
-        {
-            List<string> englishFiles = new List<string>();
-
-            DirectoryInfo sourceDir = new DirectoryInfo(root);
-
-            List<string> allFiles = ResxHelper.FindAllResxFiles(sourceDir.FullName);
-            List<string> transFiles = ResxHelper.FindAllResxFiles(sourceDir.FullName, SearchOption.AllDirectories, "*.??*.resx");
-            englishFiles.AddRange(allFiles.Except(transFiles).ToList());
-
-            englishFiles.Sort();
-
-            return englishFiles;
-        }
 
 
     } // ResxHelper

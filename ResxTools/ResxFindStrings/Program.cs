@@ -20,11 +20,16 @@ namespace ResxFindStrings
 
         static string TranslatedFilePattern = "*.??*.resx";
 
-        static FindResxFiles findResxFiles = new FindResxFiles() { AllResxFilePattern = "*.resx", TranslatedFilePattern = "*.??*.resx" };
+        static string EnglishFilePattern = string.Empty;
+
+        static FindResxFiles findResxFiles = new FindResxFiles()
+        {
+            AllResxFilePattern = "*.resx",
+            TranslatedFilePattern = "*.??*.resx", // FileBaseName.Code.resx, where Language Code has at least 2 characters
+        };
 
         static void Main(string[] args)
         {
-
             if (!ParseArgs(args))
             {
                 Usage();
@@ -33,10 +38,12 @@ namespace ResxFindStrings
             {
                 TBTs tBTs = new TBTs();
 
-                // Get list of all English Resx files under the root folder
-                List<string> englishFiles = FindAllEnglishResxFiles(new FileInfo(rootPathname).FullName);
+                FindResxFiles findResxFiles = new FindResxFiles();
+                findResxFiles.EnglishFilePattern = EnglishFilePattern;
 
-                //List<string> englishFiles = findResxFiles.FindAllEnglishResxFiles(new FileInfo(rootPathname).FullName);
+
+                // Get list of all English Resx files under the root folder
+                List<string> englishFiles = findResxFiles.FindAllEnglishResxFiles(new FileInfo(rootPathname).FullName);
 
                 foreach (var resxFile in englishFiles)
                 {
@@ -76,37 +83,6 @@ namespace ResxFindStrings
             Console.WriteLine();
         }
 
-        public static List<string> FindAllEnglishResxFiles(string root, SearchOption serchOption = SearchOption.AllDirectories)
-        {
-            List<string> englishFiles = new List<string>();
-
-            DirectoryInfo sourceDir = new DirectoryInfo(root);
-
-            List<string> allFiles = FindAllResxFiles(sourceDir.FullName, AllResxFilePattern);
-            List<string> transFiles = FindAllResxFiles(sourceDir.FullName, TranslatedFilePattern, SearchOption.AllDirectories);
-            englishFiles.AddRange(allFiles.Except(transFiles).ToList());
-
-            englishFiles.Sort();
-
-            return englishFiles;
-        }
-
-        public static List<string> FindAllResxFiles(string root, string pattern, SearchOption serchOption = SearchOption.AllDirectories)
-        {
-            List<string> found = new List<string>();
-
-            DirectoryInfo sourceDir = new DirectoryInfo(root);
-            FileInfo[] files = sourceDir.GetFiles(pattern, serchOption);  //Get only files which you need to work with.
-            foreach (var file in files)
-            {
-                string filename = file.FullName;
-                found.Add(filename);
-            }
-
-            found.Sort();
-
-            return found;
-        }
 
 
         static void Usage()
@@ -159,6 +135,17 @@ namespace ResxFindStrings
                 else if (File.Exists(programArg))
                 {
                     // read list of search items from file and add to list of names
+                }
+                else if (programArg.IndexOf("/lang:", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                {
+                    var temp = programArg.Remove(0, "/lang:".Length);
+                    char[] trim = { '"' };
+                    temp.Trim(new char[] { '"' });
+
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        EnglishFilePattern = temp;
+                    }
                 }
                 else if (programArg.IndexOf("/src:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {

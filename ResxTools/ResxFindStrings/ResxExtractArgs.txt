@@ -3,6 +3,7 @@
 # Comment (#) and blank lines are ignored.
 # End-of-Line comments are removed
 
+/lang:*.fr.resx # Extract French strings. Defaults to English
 /src:E:\APSW_5.16.0.47707.ResX # Source folder
 /out:Extracted.xml # XML To-Be-Translated list
 
