@@ -16,26 +16,26 @@ namespace tgenaux.ResxTools
         public List<string> TranslatedFilePatterns { get; set; }
 
         // TODO: Make list
-        public List<string> EnglishFilePatterns { get; set; }
+        public List<string> NoCodeFilePatterns { get; set; }
 
         public FindResxFiles()
         {
             AllResxFilePatterns = new List<string>();
             TranslatedFilePatterns = new List<string>();
-            EnglishFilePatterns = new List<string>();
+            NoCodeFilePatterns = new List<string>();
         }
 
-        public List<string> FindAllEnglishResxFiles(string root, SearchOption serchOption = SearchOption.AllDirectories)
+        public List<string> FindAllNoCodeResxFiles(string root, SearchOption serchOption = SearchOption.AllDirectories)
         {
-            List<string> englishFiles = new List<string>();
+            List<string> noCodeFiles = new List<string>();
 
-            // Do English files include a language code?
-            if (EnglishFilePatterns.Count > 0)
+            // Do NoCode files include a language code?
+            if (NoCodeFilePatterns.Count > 0)
             {
-                englishFiles = FindResxFiles.FindAllResxFiles(root, EnglishFilePatterns, serchOption);
+                noCodeFiles = FindResxFiles.FindAllResxFiles(root, NoCodeFilePatterns, serchOption);
             }
 
-            else // Find all English files base on the  differernce between the sets of all files and all translated files.
+            else // Find all NoCode files base on the  differernce between the sets of all files and all translated files.
             {
                 // Find all files and all translated files
                 string rootFullName = new DirectoryInfo(root).FullName;
@@ -43,12 +43,12 @@ namespace tgenaux.ResxTools
                 List<string> transFiles = FindResxFiles.FindAllResxFiles(rootFullName, TranslatedFilePatterns, serchOption);
 
                 // Add all files except for the translated files
-                englishFiles.AddRange(allFiles.Except(transFiles).ToList());
+                noCodeFiles.AddRange(allFiles.Except(transFiles).ToList());
             }
 
-            englishFiles.Sort();
+            noCodeFiles.Sort();
 
-            return englishFiles;
+            return noCodeFiles;
         }
 
         public List<string> FindAllResxFiles(string root, SearchOption serchOption = SearchOption.AllDirectories)

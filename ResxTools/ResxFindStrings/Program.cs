@@ -29,7 +29,7 @@ namespace ResxFindStrings
                 TBTs tBTs = new TBTs();                
 
                 // Get list of all English Resx files under the root folder
-                List<string> englishFiles = findResxFiles.FindAllEnglishResxFiles(new FileInfo(rootPathname).FullName);
+                List<string> englishFiles = findResxFiles.FindAllNoCodeResxFiles(new FileInfo(rootPathname).FullName);
 
                 foreach (var resxFile in englishFiles)
                 {
@@ -152,7 +152,7 @@ namespace ResxFindStrings
 
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        findResxFiles.EnglishFilePatterns.Add(temp);
+                        findResxFiles.NoCodeFilePatterns.Add(temp);
                     }
                 }
                 else if (programArg.IndexOf("/src:", StringComparison.CurrentCultureIgnoreCase) >= 0)
