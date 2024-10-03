@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ResxTools">
-      <HintPath>..\ResxTools\ResxTools\bin\Debug\ResxTools.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,6 +55,12 @@
     <None Include="ResxExtractArgs.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ResxTools\ResxTools\ResxTools.csproj">
+      <Project>{98ce40c9-fc3e-42c9-99e3-fb4967075224}</Project>
+      <Name>ResxTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

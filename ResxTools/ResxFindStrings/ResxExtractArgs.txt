@@ -3,15 +3,32 @@
 # Comment (#) and blank lines are ignored.
 # End-of-Line comments are removed
 
-/allfiles:*.resx      # File pattern for all Resx files
-/trans:*.??*.resx     # File pattern for Translated Resx files
-/lang:*.fr.resx # File pattern for a specific language
-/lang:*.ja.resx # File pattern for a specific language
-/lang:*.zh-CN.resx # File pattern for a specific language
+# File Patterns
+# 1. To search for the source (untranslated) Resx files:
+#     - Include /lang:*.en.resx with the file patten with the source language code.
+#
+#     If no language code is included in the source Resx filename, then:
+#     - Include /allfiles:*.resx with the file patten all Resx files
+#     - Include /trans:*.??*.resx with the file patten all translated Resx files
+#     The tool will create a list of All-Files and Translated-Files. It will then
+#     remove the translated files from the list of All-Files, leaving only the source files.
+#
+# 2. To search individule language Resx files. Include a file pattern for each language:
+#    /lang:*.fr.resx # File pattern for a specific language
+#    /lang:*.ja.resx # File pattern for a specific language
+#    /lang:*.zh-CN.resx # File pattern for a specific languag
 
+# Resx string IDs (name), just provide a list of the IDs:
+#    /lang:*.fr.resx
+#    /lang:*.ja.resx
+#    /lang:*.zh-CN.resx
+
+### Example - no language code is included in source filenames
+/allfiles:*.resx
+/trans:*.??*.resx
 /src:E:\APSW_5.16.0.47707.ResX # Source folder
 
-/out:Extracted.xml # XML To-Be-Translated list
+/out:Example_Resx_Strings_To-Be-Translated.xml # XML To-Be-Translated list
 
 # List of the Resx identifieers to be translated
 CassetteIndexIDColon
