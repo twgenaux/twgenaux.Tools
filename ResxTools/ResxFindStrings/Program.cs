@@ -118,10 +118,6 @@ namespace ResxFindStrings
                 {
                     return false; // returns false to display usage.
                 }
-                else if (File.Exists(programArg))
-                {
-                    // read list of search items from file and add to list of names
-                }
                 else if (programArg.IndexOf("/allfiles:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
                     var temp = programArg.Remove(0, "/allfiles:".Length);
@@ -158,8 +154,7 @@ namespace ResxFindStrings
                 else if (programArg.IndexOf("/src:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
                     var temp = programArg.Remove(0, "/src:".Length);
-                    char[] trim = { '"' };
-                    temp.Trim(new char[] { '"' });
+                    temp = temp.Trim(new char[] { '"' });
 
                     if (!string.IsNullOrEmpty(temp) && (File.Exists(temp) || Directory.Exists(temp)))
                     {
