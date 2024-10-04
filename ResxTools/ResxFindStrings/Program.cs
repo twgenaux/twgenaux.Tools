@@ -101,6 +101,8 @@ namespace ResxFindStrings
 
         static bool ParseArgs(string[] args)
         {
+            bool goodSoFar = true;
+
             // All files passed in are a list of program args
             // Add them to ProgramArgs list 
             foreach (var arg in  args) 
@@ -110,13 +112,17 @@ namespace ResxFindStrings
                     List<string> programArg = ReadProgramArgs(arg);
                     ProgramArgs.AddRange(programArg.ToList());
                 }
+                else
+                {
+                    ProgramArgs.Add(arg);
+                }
             }
 
             foreach (var programArg in ProgramArgs)
             {
                 if (programArg.IndexOf("help", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
-                    return false; // returns false to display usage.
+                    goodSoFar = false; // returns false to display usage.
                 }
                 else if (programArg.IndexOf("/allfiles:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
@@ -156,7 +162,7 @@ namespace ResxFindStrings
                     var temp = programArg.Remove(0, "/src:".Length);
                     temp = temp.Trim(new char[] { '"' });
 
-                    if (!string.IsNullOrEmpty(temp) && (File.Exists(temp) || Directory.Exists(temp)))
+                    if (!string.IsNullOrEmpty(temp) && Directory.Exists(temp))
                     {
                         rootPathname = temp;
                     }
@@ -165,7 +171,7 @@ namespace ResxFindStrings
                         Console.WriteLine();
                         Console.WriteLine($"***Source (src) does not exist: {temp}");
                         Console.WriteLine();
-                        return false;
+                        goodSoFar = false;
                     }
                 }
                 else if (programArg.IndexOf("/out:", StringComparison.CurrentCultureIgnoreCase) >= 0)
@@ -183,7 +189,7 @@ namespace ResxFindStrings
                         Console.WriteLine();
                         Console.WriteLine($"***Invalid arg: {programArg}");
                         Console.WriteLine();
-                        return false;
+                        goodSoFar = false;
                     }
                 }
                 else
@@ -192,7 +198,16 @@ namespace ResxFindStrings
                 }
             }
 
-            return true;
+            goodSoFar = goodSoFar && Directory.Exists(rootPathname);
+
+            goodSoFar = goodSoFar && (findResxFiles.NoCodeFilePatterns.Count > 0) ||
+                (findResxFiles.AllResxFilePatterns.Count > 0 && findResxFiles.TranslatedFilePatterns.Count > 0);
+
+            goodSoFar = goodSoFar &&
+                (ProgramArgs.Count > 0) &&
+                (names.Count > 0);
+
+            return goodSoFar;
         }
 
         static List<string> ReadProgramArgs(string pathname)
@@ -201,34 +216,52 @@ namespace ResxFindStrings
 
             if (File.Exists(pathname))
             {
-                int lineNumber = 0;
-                string line;
+                string[] lines = File.ReadAllLines(pathname);
 
-                using (var sr = new StreamReader(pathname))
+                programArgs = ReadProgramArgs(lines);
+            }
+
+            return programArgs;
+        }
+        static List<string> ReadProgramArgs(string[] args)
+        {
+            List<string> programArgs = new List<string>();
+
+            int lineNumber = 0;
+            foreach (var arg in args)
+            {
+                string line = arg;
+
+                lineNumber++;
+
+                // Ingore Markdonwn code fence
+                if (line.Contains("```"))
                 {
-                    while (null != (line = sr.ReadLine()))
-                    {
-                        lineNumber++;
-
-                        // Remove comment
-                        if (line.Contains('#'))
-                        {
-                            line = line.Substring(0, line.IndexOf("#"));
-                        }
-
-                        // Remove leading and trailing whitespace
-                        line = line.Trim();
-
-                        // Do not add blank lines
-                        if (!string.IsNullOrEmpty(line))
-                        {
-                            programArgs.Add(line);
-                        }
-                    }
+                    continue;
                 }
+
+                // Remove comment
+                if (line.Contains('#'))
+                {
+                    line = line.Substring(0, line.IndexOf("#"));
+                }
+
+                line = line.Trim();
+
+                // Do not add blank lines
+                if (string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+
+                // Remove leading and trailing Markdonwn code
+                line = line.Trim(new char[] { '`' });
+
+                Console.WriteLine(line);
+
+                programArgs.Add(line);
             }
             return programArgs;
         }
-
     }
 }
