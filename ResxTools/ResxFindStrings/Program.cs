@@ -18,6 +18,8 @@ namespace ResxFindStrings
 
         static FindResxFiles findResxFiles = new FindResxFiles();
 
+        static FindResxStrings findResxStrings = new FindResxStrings();
+
         static void Main(string[] args)
         {
             if (!ParseArgs(args))
@@ -26,45 +28,18 @@ namespace ResxFindStrings
             }
             else 
             {
-                TBTs tBTs = new TBTs();                
+                findResxStrings.FindStrings();
 
-                // Get list of all English Resx files under the root folder
-                List<string> englishFiles = findResxFiles.FindAllNoCodeResxFiles(new FileInfo(rootPathname).FullName);
+                findResxStrings.TbtStrings.MergeEquivalent();
 
-                foreach (var resxFile in englishFiles)
+                foreach (var tbt in findResxStrings.TbtStrings.ToBeTranslated)
                 {
-                    ResxStrings resxStrings = ResxHelper.ReadResxFile(resxFile);
-
-                    foreach (var name in names)
-                    {
-                        if (resxStrings.ContainsKey(name))
-                        {
-                            TBT tbt = new TBT(); // To Be Translated
-
-                            var resxString = resxStrings[name];
-
-                            tbt.ID = resxString.Name;
-                            tbt.Text = resxString.Value;
-                            tbt.Comment = resxString.Comment;
-
-                            FileInfo fileInfo = new FileInfo(resxFile);
-                            DirectoryInfo di = fileInfo.Directory;
-                            tbt.Sources.Add($"{di.Name}\\{fileInfo.Name}");
-
-                            tBTs.Add( tbt );
-
-                            Console.WriteLine(tbt.ID);
-                            Console.WriteLine(tbt.Text);
-                            Console.WriteLine(tbt.Comment);
-                            Console.WriteLine(tbt.Sources);
-                            Console.WriteLine();
-                        }
-                    }
+                    Console.WriteLine(tbt.ID);
+                    Console.WriteLine(string.Join("\n", tbt.Sources));
+                    Console.WriteLine();
                 }
 
-                tBTs.Merge();
-
-                TBTSerializer.SerializeToXml(tBTs, outPathname);
+                TBTSerializer.SerializeToXml(findResxStrings.TbtStrings, findResxStrings.OutPathname);
             }
             Console.WriteLine();
         }
@@ -132,7 +107,7 @@ namespace ResxFindStrings
 
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        findResxFiles.AllResxFilePatterns.Add(temp);
+                        findResxStrings.AllResxFilePattern = temp;
                     }
                 }
                 else if (programArg.IndexOf("/trans:", StringComparison.CurrentCultureIgnoreCase) >= 0)
@@ -143,7 +118,7 @@ namespace ResxFindStrings
 
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        findResxFiles.TranslatedFilePatterns.Add(temp);
+                        findResxStrings.TranslatedFilePattern = temp;
                     }
                 }
                 else if (programArg.IndexOf("/lang:", StringComparison.CurrentCultureIgnoreCase) >= 0)
@@ -154,7 +129,8 @@ namespace ResxFindStrings
 
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        findResxFiles.NoCodeFilePatterns.Add(temp);
+                        findResxFiles.FilePatterns.Add(temp);
+                        findResxStrings.NoCodeFilePattern = temp;
                     }
                 }
                 else if (programArg.IndexOf("/src:", StringComparison.CurrentCultureIgnoreCase) >= 0)
@@ -164,7 +140,7 @@ namespace ResxFindStrings
 
                     if (!string.IsNullOrEmpty(temp) && Directory.Exists(temp))
                     {
-                        rootPathname = temp;
+                        findResxStrings.RootPathname = temp;
                     }
                     else
                     {
@@ -182,7 +158,7 @@ namespace ResxFindStrings
 
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        outPathname = temp;
+                        findResxStrings.OutPathname = temp;
                     }
                     else
                     {
@@ -194,20 +170,11 @@ namespace ResxFindStrings
                 }
                 else
                 {
-                    names.Add(programArg); // add search items
+                    findResxStrings.Names.Add(programArg); // add search items
                 }
             }
 
-            goodSoFar = goodSoFar && Directory.Exists(rootPathname);
-
-            goodSoFar = goodSoFar && (findResxFiles.NoCodeFilePatterns.Count > 0) ||
-                (findResxFiles.AllResxFilePatterns.Count > 0 && findResxFiles.TranslatedFilePatterns.Count > 0);
-
-            goodSoFar = goodSoFar &&
-                (ProgramArgs.Count > 0) &&
-                (names.Count > 0);
-
-            return goodSoFar;
+            return findResxStrings.Ready();
         }
 
         static List<string> ReadProgramArgs(string pathname)
@@ -256,8 +223,6 @@ namespace ResxFindStrings
 
                 // Remove leading and trailing Markdonwn code
                 line = line.Trim(new char[] { '`' });
-
-                Console.WriteLine(line);
 
                 programArgs.Add(line);
             }

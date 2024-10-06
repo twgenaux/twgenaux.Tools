@@ -16,23 +16,23 @@ namespace tgenaux.ResxTools
         public List<string> TranslatedFilePatterns { get; set; }
 
         // TODO: Make list
-        public List<string> NoCodeFilePatterns { get; set; }
+        public List<string> FilePatterns { get; set; }
 
         public FindResxFiles()
         {
             AllResxFilePatterns = new List<string>();
             TranslatedFilePatterns = new List<string>();
-            NoCodeFilePatterns = new List<string>();
+            FilePatterns = new List<string>();
         }
 
-        public List<string> FindAllNoCodeResxFiles(string root, SearchOption serchOption = SearchOption.AllDirectories)
+        public List<string> FindFiles(string root, SearchOption serchOption = SearchOption.AllDirectories)
         {
             List<string> noCodeFiles = new List<string>();
 
             // Do NoCode files include a language code?
-            if (NoCodeFilePatterns.Count > 0)
+            if (FilePatterns.Count > 0)
             {
-                noCodeFiles = FindResxFiles.FindAllResxFiles(root, NoCodeFilePatterns, serchOption);
+                noCodeFiles = FindResxFiles.FindAllResxFiles(root, FilePatterns, serchOption);
             }
 
             else // Find all NoCode files base on the  differernce between the sets of all files and all translated files.

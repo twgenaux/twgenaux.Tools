@@ -138,11 +138,14 @@ namespace tgenaux.ResxTools
                     ResXDataNode node = (ResXDataNode)dict.Value;
                     ITypeResolutionService typeres = null;
 
-                    String name = node.Name;
-                    String value = (node.GetValue(typeres)).ToString();
-                    String comment = node.Comment;
+                    if (node.GetValue(typeres) is string)
+                    {
+                        String name = node.Name;
+                        String value = (string)node.GetValue(typeres);
+                        String comment = node.Comment;
 
-                    resxDict.AddOrReplace(name, value, comment);
+                        resxDict.AddOrReplace(name, value, comment);
+                    }
                 }
             }
 
