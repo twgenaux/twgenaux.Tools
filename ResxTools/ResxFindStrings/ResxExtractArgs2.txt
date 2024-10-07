@@ -8,6 +8,23 @@
 # 
 # - Asterisk (*): Matches any number of characters, including zero.
 # - Question mark (?): Matches a single character.
+#
+# /? - Help
+# 
+# Argslist.txt - Program Args file is a list of one or more args listed below.
+#                 Can be any name so long as it does now have a resx file extesion.
+# 
+# /allfiles:patern - File pattern  for all Resx files (*.resx)
+# 
+# /trans:patern - File pattern for all translated Resx files (*.??*.resx)
+# 
+# /lang:patern - A file pattern with the language code to search for strings 
+# 
+# /src:folder - Root folder with all Resx files live
+# 
+# /out:pathname - Output path for the T0-Be-Translated XML file
+# 
+# ID - One or more unique Resx string ID (name)
 # 
 # Examples:
 # 

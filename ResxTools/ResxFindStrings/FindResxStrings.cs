@@ -54,7 +54,7 @@ namespace ResxFindStrings
         /// <summary>
         /// File pattern for finding the langaue files Resx files
         /// </summary>
-        public string NoCodeFilePattern
+        public string FilePattern
         {
             set
             {

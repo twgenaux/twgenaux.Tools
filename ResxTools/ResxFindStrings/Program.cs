@@ -95,75 +95,69 @@ namespace ResxFindStrings
 
             foreach (var programArg in ProgramArgs)
             {
-                if (programArg.IndexOf("help", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                if ((programArg.IndexOf("help", StringComparison.CurrentCultureIgnoreCase) >= 0) ||
+                    (programArg.IndexOf("/help", StringComparison.CurrentCultureIgnoreCase) >= 0) ||
+                    (programArg.IndexOf("/?", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                    )
                 {
-                    goodSoFar = false; // returns false to display usage.
+                        goodSoFar = false; // returns false to display usage.
                 }
                 else if (programArg.IndexOf("/allfiles:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
-                    var temp = programArg.Remove(0, "/allfiles:".Length);
-                    char[] trim = { '"' };
-                    temp.Trim(new char[] { '"' });
+                    var value = GetArgValue("/allfiles:", programArg);
 
-                    if (!string.IsNullOrEmpty(temp))
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        findResxStrings.AllResxFilePattern = temp;
+                        findResxStrings.AllResxFilePattern = value;
                     }
                 }
                 else if (programArg.IndexOf("/trans:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
-                    var temp = programArg.Remove(0, "/trans:".Length);
-                    char[] trim = { '"' };
-                    temp.Trim(new char[] { '"' });
+                    var value = GetArgValue("/trans:", programArg);
 
-                    if (!string.IsNullOrEmpty(temp))
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        findResxStrings.TranslatedFilePattern = temp;
+                        findResxStrings.TranslatedFilePattern = value;
                     }
                 }
                 else if (programArg.IndexOf("/lang:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
-                    var temp = programArg.Remove(0, "/lang:".Length);
-                    char[] trim = { '"' };
-                    temp.Trim(new char[] { '"' });
+                    var value = GetArgValue("/lang:", programArg);
 
-                    if (!string.IsNullOrEmpty(temp))
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        findResxFiles.FilePatterns.Add(temp);
-                        findResxStrings.NoCodeFilePattern = temp;
+                        findResxFiles.FilePatterns.Add(value);
+                        findResxStrings.FilePattern = value;
                     }
                 }
                 else if (programArg.IndexOf("/src:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
-                    var temp = programArg.Remove(0, "/src:".Length);
-                    temp = temp.Trim(new char[] { '"' });
+                    var value = GetArgValue("/src:", programArg);
 
-                    if (!string.IsNullOrEmpty(temp) && Directory.Exists(temp))
+                    if (!string.IsNullOrEmpty(value) && Directory.Exists(value))
                     {
-                        findResxStrings.RootPathname = temp;
+                        findResxStrings.RootPathname = value;
                     }
                     else
                     {
                         Console.WriteLine();
-                        Console.WriteLine($"***Source (src) does not exist: {temp}");
+                        Console.WriteLine($"***Source (src) does not exist: {value}");
                         Console.WriteLine();
                         goodSoFar = false;
                     }
                 }
                 else if (programArg.IndexOf("/out:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
-                    var temp = programArg.Remove(0, "/out:".Length);
-                    char[] trim = { '"' };
-                    temp.Trim(new char[] { '"' });
+                    var value = GetArgValue("/out:", programArg);
 
-                    if (!string.IsNullOrEmpty(temp))
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        findResxStrings.OutPathname = temp;
+                        findResxStrings.OutPathname = value;
                     }
                     else
                     {
                         Console.WriteLine();
-                        Console.WriteLine($"***Invalid arg: {programArg}");
+                        Console.WriteLine($"***Invalid arg: {value}");
                         Console.WriteLine();
                         goodSoFar = false;
                     }
@@ -172,9 +166,23 @@ namespace ResxFindStrings
                 {
                     findResxStrings.Names.Add(programArg); // add search items
                 }
+
+                if (!goodSoFar)
+                {
+                    return goodSoFar;
+                }
             }
 
             return findResxStrings.Ready();
+        }
+
+        static string GetArgValue(string argType, string programArg)
+        {
+            var value = programArg.Remove(0, argType.Length);
+            char[] trim = { '"' };
+            value.Trim(new char[] { '"' });
+
+            return value;
         }
 
         static List<string> ReadProgramArgs(string pathname)
