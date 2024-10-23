@@ -1,8 +1,27 @@
-﻿using ResxFindStrings;
-using System;
+﻿// MIT License
+// 
+// Copyright (c) 2024 Theron W. Genaux
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using tgenaux.ResxTools;
 
 namespace ResxFindStrings
@@ -15,22 +34,22 @@ namespace ResxFindStrings
         public ToBeTranslatedStrings TbtStrings { get; }
 
         /// <summary>
-        /// Directory of Resx files
+        /// Root folder containing all Resx files
         /// </summary>
         public string RootPathname { get; set; }
 
         /// <summary>
-        /// To-Be-Translated XMLoutput pathname
+        /// To-Be-Translated XML output pathname
         /// </summary>
         public string OutPathname { get; set; }
 
         /// <summary>
-        /// Resx IDs (names) to find
+        /// List Resx IDs (names) to find
         /// </summary>
         public List<string> Names { get; set; }
 
         /// <summary>
-        /// File pattern for finding all Resx files
+        /// File patterns for finding all Resx files
         /// </summary>
         public string AllResxFilePattern
         {
@@ -41,7 +60,7 @@ namespace ResxFindStrings
         }
 
         /// <summary>
-        /// File pattern for finding all translated Resx files
+        /// File patterns for finding all translated files
         /// </summary>
         public string TranslatedFilePattern
         {
@@ -52,7 +71,9 @@ namespace ResxFindStrings
         }
 
         /// <summary>
-        /// File pattern for finding the langaue files Resx files
+        /// List of specific files patterns to find
+        ///   If the translation source files are English, 
+        ///   one might use the file pattern: *.en.resx
         /// </summary>
         public string FilePattern
         {
@@ -63,7 +84,7 @@ namespace ResxFindStrings
         }
 
         /// <summary>
-        /// 
+        /// Finds all transltion source files (untranslated files)
         /// </summary>
         private FindResxFiles FindResxFiles { get; set; }
 
@@ -77,9 +98,9 @@ namespace ResxFindStrings
         }
 
         /// <summary>
-        /// Returns true if enough properites have been defined
+        /// Returns true if the minimum required properites have been defined
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true if the minimum required properites have been defined</returns>
         public bool Ready()
         {
             bool goodSoFar = Directory.Exists(RootPathname);
@@ -94,7 +115,7 @@ namespace ResxFindStrings
         }
 
         /// <summary>
-        /// Find Resx strings
+        /// Find the Resx strings
         /// </summary>
         public void FindStrings()
         {

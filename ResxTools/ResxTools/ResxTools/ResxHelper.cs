@@ -1,119 +1,35 @@
-﻿using System;
+﻿// MIT License
+// 
+// Copyright (c) 2024 Theron W. Genaux
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
-using System.Linq;
 using System.Resources;
-using System.Xml.Linq;
-
-// Copyright @ 2015-2023 Theron W. Genaux
-// See "ResX-Tools Readme.md" for license.
 
 namespace tgenaux.ResxTools
 {
     public static class ResxHelper
     {
-        static public List<FilePair> MatchEngFilesToTrans(string path)
-        {
-            List<FilePair> pairedFiles = new List<FilePair>();
-
-            DirectoryInfo di = new DirectoryInfo(path);
-
-            FindResxFiles findResxFiles = new FindResxFiles();
-
-            List<string> allFiles = findResxFiles.FindAllResxFiles(di.FullName);
-            List<string> transFiles = findResxFiles.FindAllResxFiles(di.FullName);
-            List<string> englishFiles = allFiles.Except(transFiles).ToList();
-
-            // Pair the English (root) files with each of their translations
-            foreach (var root in englishFiles)
-            {
-                List<FilePair> rootFiles = FindTranslatedFiles(root);
-
-                pairedFiles.AddRange(rootFiles);
-            }
-            return pairedFiles;
-        }
-
-        static public List<FilePair> FindTranslatedFiles(string englishFilename)
-        {
-            List<FilePair> pairedFiles = new List<FilePair>();
-
-            FindResxFiles findResxFiles = new FindResxFiles();
-
-            FileInfo fi = new FileInfo(englishFilename);
-
-            string name = fi.Name;
-            string extension = fi.Extension;
-            DirectoryInfo folder = fi.Directory;
-
-            string target = name.Substring(0, name.Length - extension.Length);
-            target = target.Replace("\\", "\\\\");
-            target = target.Replace(".", "\\.");
-            List<string> relatedFiles = findResxFiles.FindAllResxFiles(folder.FullName, SearchOption.AllDirectories);
-
-            foreach (var relatedFile in relatedFiles)
-            {
-                FilePair fp = new FilePair()
-                {
-                    LeftFilename = fi.FullName,
-                    RightFilename = relatedFile,
-                };
-
-                pairedFiles.Add(fp);
-            }
-
-            return pairedFiles;
-        }
-
-        static public List<string> FindDuplicatesResxStringIds(String filename)
-        {
-            List<string> resxIds = new List<string>();
-            List<string> dupIds = new List<string>();
-
-            FileInfo fi = new FileInfo(filename);
-            XDocument xdoc = XDocument.Load(fi.FullName);
-
-            XElement rootElement = xdoc.Element("root");
-
-            var elements =
-            from elm in rootElement.Descendants("data")
-            select new
-            {
-                root = elm,
-                attrs = elm.Attributes(),
-                elems = elm.Elements(),
-
-                name = elm.Attribute("name").Value,
-            };
-
-            foreach (var element in elements)
-            {
-                var values = element.root.Descendants("value");
-                var comments = element.root.Descendants("comment");
-
-                ResxString rs = new ResxString()
-                {
-                    Name = element.name,
-                    Value = (values.Count() > 0) ? values.FirstOrDefault().Value : "",
-                    Comment = (comments.Count() > 0) ? comments.FirstOrDefault().Value : "",
-                };
-
-                string id = element.name;
-                if (resxIds.Contains(id))
-                {
-                    dupIds.Add(id);
-                }
-                else
-                {
-                    resxIds.Add(id);
-                }
-            }
-
-            return dupIds;
-        }
-
         /// <summary>
         ///  ReadResxFile - Resx string resource XML file reader
         ///  If Resx file contains duplicate IDs , only one is retained. 
@@ -209,9 +125,5 @@ namespace tgenaux.ResxTools
                 backup.Delete();
             }
         }
-
-
-
-
-    } // ResxHelper
+    }
 }

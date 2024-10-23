@@ -57,7 +57,7 @@
 # Example - no language code is included in source filenames
 /allfiles:*.resx
 /trans:*.??*.resx
-/src:E:\ResxTools\Translations # Source folder
+/src:D:\ResxTools\Translations # Source folder
 
 /out:Example_Resx_Strings_To-Be-Translated.xml # XML To-Be-Translated list
 

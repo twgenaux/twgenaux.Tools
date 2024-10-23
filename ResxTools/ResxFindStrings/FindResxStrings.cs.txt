@@ -1,0 +1,9 @@
+To-Be-Translated strings
+Directory of Resx files
+To-Be-Translated XMLoutput pathname
+Resx IDs (names) to find
+File pattern for finding all Resx files
+File pattern for finding all translated Resx files
+File pattern for finding the langaue files Resx files
+Returns true if enough properites have been defined
+Find Resx strings
