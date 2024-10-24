@@ -22,9 +22,6 @@
 
 using System;
 
-// Copyright @ 2015-2023 Theron W. Genaux
-// See "ResX-Tools Readme.md" for license.
-
 namespace tgenaux.ResxTools
 {
     /// <summary>

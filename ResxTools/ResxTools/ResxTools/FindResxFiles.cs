@@ -29,7 +29,7 @@ namespace tgenaux.ResxTools
     /// <summary>
     /// FindResxFiles
     /// 
-    /// Finds all transltion source files (untranslated files)
+    /// Finds files for translation
     /// </summary>
     public class FindResxFiles
     {
@@ -109,7 +109,8 @@ namespace tgenaux.ResxTools
         /// <param name="root">Root folder containing all Resx files</param>
         /// <param name="serchOption">DirectoryInfo.GetFiles SearchOption</param>
         /// <returns>Returns files matching the file patterns</returns>
-        private static List<string> FindAllResxFiles(string root, List<string> patterns, SearchOption serchOption = SearchOption.AllDirectories)
+        private static List<string> FindAllResxFiles(string root, List<string> patterns, 
+            SearchOption serchOption = SearchOption.AllDirectories)
         {
             List<string> found = new List<string>();
 

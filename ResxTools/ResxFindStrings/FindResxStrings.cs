@@ -84,7 +84,7 @@ namespace ResxFindStrings
         }
 
         /// <summary>
-        /// Finds all transltion source files (untranslated files)
+        /// Finds all translation source files (untranslated files)
         /// </summary>
         private FindResxFiles FindResxFiles { get; set; }
 
@@ -98,9 +98,9 @@ namespace ResxFindStrings
         }
 
         /// <summary>
-        /// Returns true if the minimum required properites have been defined
+        /// Returns true if the minimum required properties have been defined
         /// </summary>
-        /// <returns>true if the minimum required properites have been defined</returns>
+        /// <returns>true if the minimum required properties have been defined</returns>
         public bool Ready()
         {
             bool goodSoFar = Directory.Exists(RootPathname);

@@ -25,7 +25,7 @@ using System;
 namespace tgenaux.ResxTools
 {
     /// <summary>
-    /// Container for a Resx string attibutes
+    /// Container for a Resx string attributes
     /// </summary>
     public class ResxString
     {

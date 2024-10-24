@@ -12,19 +12,19 @@
 # /? - Help
 # 
 # Argslist.txt - Program Args file is a list of one or more args listed below.
-#                 Can be any name so long as it does now have a resx file extesion.
+#                 Can be any name so long as it does not have a resx file extesion.
 # 
-# /allfiles:patern - File pattern  for all Resx files (*.resx)
+# /allfiles:patern - File pattern for finding all Resx files (*.resx)
 # 
 # /trans:patern - File pattern for all translated Resx files (*.??*.resx)
 # 
-# /lang:patern - A file pattern with the language code to search for strings 
+# /lang:patern - A file pattern for language-specific codes for finding target files 
 # 
-# /src:folder - Root folder with all Resx files live
+# /src:folder - Root folder where all Resx files reside
 # 
-# /out:pathname - Output path for the T0-Be-Translated XML file
+# /out:pathname - Output path for the To-Be-Translated XML report file
 # 
-# ID - One or more unique Resx string ID (name)
+# ID - One or more unique Resx string IDs (name)
 # 
 # Examples:
 # 

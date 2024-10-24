@@ -28,32 +28,42 @@ using tgenaux.ResxTools;
 
 namespace ResxFindStrings
 {
+    /// <summary>
+    /// Command line program for finding Resx strings for translation
+    /// </summary>
     internal class ResxFindStringsProgram
     {
-        static string rootPathname = "";
-
-        static string outPathname = "";
-
-        static List<string> names = new List<string>();
-
+        /// <summary>
+        /// Program arguments
+        /// </summary>
         static List<string> ProgramArgs = new List<string>();
 
+        /// <summary>
+        /// Resx file patterns
+        /// </summary>
         static FindResxFiles findResxFiles = new FindResxFiles();
 
+        /// <summary>
+        /// The tool that finds the strings
+        /// </summary>
         static FindResxStrings findResxStrings = new FindResxStrings();
 
         static void Main(string[] args)
         {
+            // Parsing args configures the findResxStrings tool
             if (!ParseArgs(args))
             {
                 Usage();
             }
             else 
             {
+                // Find the strings
                 findResxStrings.FindStrings();
 
+                // Merge equivalent strings
                 findResxStrings.TbtStrings.MergeEquivalent();
 
+                // List the strings on the console
                 foreach (var tbt in findResxStrings.TbtStrings.ToBeTranslated)
                 {
                     Console.WriteLine(tbt.ID);
@@ -61,46 +71,55 @@ namespace ResxFindStrings
                     Console.WriteLine();
                 }
 
+                // Save the To-Be-Translated stings
                 TBTSerializer.SerializeToXml(findResxStrings.TbtStrings, findResxStrings.OutPathname);
             }
             Console.WriteLine();
         }
 
-
-
         static void Usage()
         {
-            // Show usage
             string programName = Environment.GetCommandLineArgs()[0];
             FileInfo fi = new FileInfo(programName);
 
-            Console.WriteLine("Compare Resx string files:");
+            Console.WriteLine("Finds Resx strings for translation");
             Console.WriteLine("Usage:");
-            Console.WriteLine("  {0} [/show:Option] | ] [/out:reportfile] [/append] lPathname rPathname", fi.Name);
-            Console.WriteLine();
-            Console.WriteLine("   where lpathname and rPathname are both either directories or resx filenames.");
-            Console.WriteLine("         lpathname - left path name");
-            Console.WriteLine("         rPathname - right path name");
+            Console.WriteLine("  {0} args", fi.Name);
             Console.WriteLine("");
-            Console.WriteLine("         /out:reportfile - write results to reportfile.");
-            Console.WriteLine("         /append - append to report");
+            Console.WriteLine("  Program args:");
             Console.WriteLine("");
-            Console.WriteLine("         /show:OnLeft  - Show string values found only on the left.");
-            Console.WriteLine("         /show:OnRight - Show string values found only on the right.");
-            Console.WriteLine("         /show:Unequal - Show string values that are different between left and right.");
-            Console.WriteLine("         /show:Equal   - Show string values that are the same between left and right.");
-            Console.WriteLine("         /show:FormatArgs  - Show string values that differ in format args.");
-            Console.WriteLine("         /show:Dups    - Show string values for duplicated IDs.");
-            Console.WriteLine("         /show:OnlyIDs - Show only string IDs (no values).");
-            Console.WriteLine("         /show:English - Process only English files.");
+            Console.WriteLine("/? - This help");
+            Console.WriteLine("");
+            Console.WriteLine("/allfiles:patern - File pattern  for finding all Resx files (*.resx)");
+            Console.WriteLine("");
+            Console.WriteLine("/trans:patern - File pattern for finding all translated Resx files (*.??*.resx)");
+            Console.WriteLine("");
+            Console.WriteLine("/lang:patern - A file pattern for language-specific codes for finding target files (*.en.resx)");
+            Console.WriteLine("");
+            Console.WriteLine("/src:folder - Root folder where all Resx files reside");
+            Console.WriteLine("");
+            Console.WriteLine("/out:pathname - Output path for the To-Be-Translated XML report file");
+            Console.WriteLine("");
+            Console.WriteLine("ID - One or more unique Resx string IDs (name)");
+            Console.WriteLine("");
+            Console.WriteLine("Argslist.txt - A program arguments file that lists one or more command line arguments.");
+            Console.WriteLine(" - The file name can be any name as long as it does not have a Resx file extension. ");
+            Console.WriteLine(" - Each line is treated as a command line arg.");
+            Console.WriteLine(" - Comment (#) and blank lines are ignored.");
+            Console.WriteLine(" - End-of-Line comments are removed.");
+            Console.WriteLine(" - All lines are trimmed to remove leading and trailing spaces.");
+            Console.WriteLine("");
+            Console.WriteLine("Windows Wildcard File Search");
+            Console.WriteLine(" - Asterisk (*): Matches any number of characters, including zero.");
+            Console.WriteLine(" - Question mark (?): Matches a single character.");
             Console.WriteLine("");
         }
 
         /// <summary>
-        /// Parse command line aurguments
+        /// Parse command line arguments
         /// </summary>
-        /// <param name="args">command line aurguments</param>
-        /// <returns>Returns true if args are vaild</returns>
+        /// <param name="args">command line arguments</param>
+        /// <returns>Returns true if args are valid</returns>
         static bool ParseArgs(string[] args)
         {
             bool goodSoFar = true;
@@ -111,7 +130,7 @@ namespace ResxFindStrings
             { 
                 if (File.Exists(arg))
                 {
-                    List<string> programArg = ReadProgramArgs(arg);
+                    List<string> programArg = ReadProgramArgsFile(arg);
                     ProgramArgs.AddRange(programArg.ToList());
                 }
                 else
@@ -203,6 +222,12 @@ namespace ResxFindStrings
             return findResxStrings.Ready();
         }
 
+        /// <summary>
+        /// Returns a program argument's value.
+        /// </summary>
+        /// <param name="argType"></param>
+        /// <param name="programArg"></param>
+        /// <returns></returns>
         static string GetArgValue(string argType, string programArg)
         {
             var value = programArg.Remove(0, argType.Length);
@@ -212,7 +237,12 @@ namespace ResxFindStrings
             return value;
         }
 
-        static List<string> ReadProgramArgs(string pathname)
+        /// <summary>
+        /// Reads a program args file
+        /// </summary>
+        /// <param name="pathname"></param>
+        /// <returns>List of program args</returns>
+        static List<string> ReadProgramArgsFile(string pathname)
         {
             List<string> programArgs = new List<string>();
 
@@ -220,12 +250,18 @@ namespace ResxFindStrings
             {
                 string[] lines = File.ReadAllLines(pathname);
 
-                programArgs = ReadProgramArgs(lines);
+                programArgs = ParseProgramArgs(lines);
             }
 
             return programArgs;
         }
-        static List<string> ReadProgramArgs(string[] args)
+
+        /// <summary>
+        /// Reads program args
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        static List<string> ParseProgramArgs(string[] args)
         {
             List<string> programArgs = new List<string>();
 
@@ -235,12 +271,6 @@ namespace ResxFindStrings
                 string line = arg;
 
                 lineNumber++;
-
-                // Ingore Markdonwn code fence
-                if (line.Contains("```"))
-                {
-                    continue;
-                }
 
                 // Remove comment
                 if (line.Contains('#'))
@@ -255,9 +285,6 @@ namespace ResxFindStrings
                 {
                     continue;
                 }
-
-                // Remove leading and trailing Markdonwn code
-                line = line.Trim(new char[] { '`' });
 
                 programArgs.Add(line);
             }
