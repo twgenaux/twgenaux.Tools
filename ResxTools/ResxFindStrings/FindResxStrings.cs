@@ -138,8 +138,8 @@ namespace ResxFindStrings
                         tbt.Comment = resxString.Comment;
 
                         FileInfo fileInfo = new FileInfo(resxFile);
-                        DirectoryInfo di = fileInfo.Directory;
-                        tbt.Sources.Add($"{di.Name}\\{fileInfo.Name}");
+                        string sourcePath = fileInfo.FullName.Substring(this.RootPathname.Length);
+                        tbt.Sources.Add(sourcePath);
 
                         TbtStrings.Add(tbt);
                     }

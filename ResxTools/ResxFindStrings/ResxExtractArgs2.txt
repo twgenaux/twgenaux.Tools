@@ -54,17 +54,17 @@
 #    /lang:*.ja.resx
 #    /lang:*.zh-CN.resx
 
-# Example - Language code is included in source filenames
+# Example - Find specifi language codes
 /lang:*.fr.resx
 /lang:*.ja.resx
 /lang:*.zh-CN.resx
 
 /src:D:\ResxTools\Translations # Source folder
 
-/out:Example_Resx_Strings_To-Be-Translated.xml # XML To-Be-Translated list
+/out:D:\ResxTools\ResxExtractArgs2.txt.xml # XML To-Be-Translated Report
 
 # List of the Resx identifiers to be translated
-CassetteIndexIDColon
-StopProcessing
-SolError.Apsw19.Short
-SolError.Apsw19.Long
+StartProcessing
+RubberBabayBuggyBumppers
+Error19.Brief
+Error19.Full

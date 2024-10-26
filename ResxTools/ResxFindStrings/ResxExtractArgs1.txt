@@ -59,10 +59,10 @@
 /trans:*.??*.resx
 /src:D:\ResxTools\Translations # Source folder
 
-/out:Example_Resx_Strings_To-Be-Translated.xml # XML To-Be-Translated list
+/out:/out:D:\ResxTools\ResxExtractArgs2.txt.xml # XML To-Be-Translated Report
 
 # List of the Resx identifiers to be translated
-CassetteIndexIDColon
-StopProcessing
-SolError.Apsw19.Short
-SolError.Apsw19.Long
+StartProcessing
+RubberBabayBuggyBumppers
+Error19.Brief
+Error19.Full
