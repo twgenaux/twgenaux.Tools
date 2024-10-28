@@ -62,7 +62,7 @@
 /out:/out:D:\ResxTools\ResxExtractArgs2.txt.xml # XML To-Be-Translated Report
 
 # List of the Resx identifiers to be translated
-StartProcessing
-RubberBabayBuggyBumppers
-Error19.Brief
-Error19.Full
+/id:StartProcessing
+/id:RubberBabayBuggyBumppers
+/id:Error19.Brief
+/id:Error19.Full

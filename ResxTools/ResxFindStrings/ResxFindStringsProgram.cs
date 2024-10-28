@@ -71,6 +71,15 @@ namespace ResxFindStrings
                     Console.WriteLine();
                 }
 
+                foreach (var id in findResxStrings.Names)
+                {
+                    if (!findResxStrings.TbtStrings.ToBeTranslated.Any(tbt => tbt.ID == id))
+                    {
+                        Console.WriteLine($"*** Did not find: {id}");
+                    }
+                }
+                Console.WriteLine();
+
                 // Save the To-Be-Translated stings
                 TBTSerializer.SerializeToXml(findResxStrings.TbtStrings, findResxStrings.OutPathname);
             }
@@ -187,7 +196,7 @@ namespace ResxFindStrings
                     else
                     {
                         Console.WriteLine();
-                        Console.WriteLine($"***Source (src) does not exist: {value}");
+                        Console.WriteLine($"***Source (src) does not exist: {programArg}");
                         Console.WriteLine();
                         goodSoFar = false;
                     }
@@ -203,14 +212,35 @@ namespace ResxFindStrings
                     else
                     {
                         Console.WriteLine();
-                        Console.WriteLine($"***Invalid arg: {value}");
+                        Console.WriteLine($"***Invalid arg: {programArg}");
                         Console.WriteLine();
                         goodSoFar = false;
                     }
                 }
+                else if (programArg.IndexOf("/id:", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                {
+                    var value = GetArgValue("/id:", programArg);
+
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        findResxStrings.Names.Add(value); // add search item
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine($"***Invalid arg: {programArg}");
+                        Console.WriteLine();
+                        goodSoFar = false;
+                    }
+
+                }
                 else
                 {
-                    findResxStrings.Names.Add(programArg); // add search items
+                    //findResxStrings.Names.Add(programArg); // add search items
+                    Console.WriteLine();
+                    Console.WriteLine($"***Invalid arg: {programArg}");
+                    Console.WriteLine();
+                    goodSoFar = false;
                 }
 
                 if (!goodSoFar)
