@@ -105,8 +105,8 @@ namespace ResxFindStrings
         {
             bool goodSoFar = Directory.Exists(RootPathname) && !string.IsNullOrEmpty(OutPathname);
 
-            goodSoFar = goodSoFar && (FindResxFiles.FilePatterns.Count > 0) ||
-                (FindResxFiles.AllResxFilePatterns.Count > 0 && FindResxFiles.TranslatedFilePatterns.Count > 0);
+            goodSoFar = goodSoFar && ((FindResxFiles.FilePatterns.Count > 0) ||
+                (FindResxFiles.AllResxFilePatterns.Count > 0 && FindResxFiles.TranslatedFilePatterns.Count > 0));
 
             goodSoFar = goodSoFar && (Names.Count > 0);
 
