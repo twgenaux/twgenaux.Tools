@@ -232,7 +232,10 @@ namespace ResxFindStrings
                         Console.WriteLine();
                         goodSoFar = false;
                     }
-
+                }
+                else if (File.Exists(programArg))
+                {
+                    // Ignore program args file
                 }
                 else
                 {

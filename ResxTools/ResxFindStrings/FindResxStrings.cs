@@ -103,7 +103,7 @@ namespace ResxFindStrings
         /// <returns>true if the minimum required properties have been defined</returns>
         public bool Ready()
         {
-            bool goodSoFar = Directory.Exists(RootPathname);
+            bool goodSoFar = Directory.Exists(RootPathname) && !string.IsNullOrEmpty(OutPathname);
 
             goodSoFar = goodSoFar && (FindResxFiles.FilePatterns.Count > 0) ||
                 (FindResxFiles.AllResxFilePatterns.Count > 0 && FindResxFiles.TranslatedFilePatterns.Count > 0);

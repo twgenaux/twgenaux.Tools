@@ -1,20 +1,30 @@
+
+
+
+
+```
+Finds Resx strings for translation
+Usage:
+  ResxFindStrings.exe /src:<root-folder> /allfiles:<patern>... /trans:<patern>... /lang:<patern>... /id:<name>... <argslist.txt>
+  Program args:
+  
 /? - This help
 
-/allfiles:patern - File pattern  for finding all Resx files (*.resx)
+/allfiles:<patern> - One or more file wildcard pattern for finding all Resx files (*.resx)
 
-/trans:patern - File pattern for finding all translated Resx files (*.??*.resx)
+/trans:<patern> - One or more file wildcard pattern for finding all translated Resx files (*.??*.resx)
 
-/lang:patern - A file pattern for language-specific codes for finding target files
+/lang:<patern> - One or more file wildcard pattern for finding language-specific codes for finding target files (*.en.resx)
 
-/src:folder - Root folder where all Resx files reside
+/src:<root-folder> - Where all Resx files reside
 
 /out:pathname - Output path for the To-Be-Translated XML report file
 
-ID - One or more unique Resx string IDs (name)
+/id:<name> - One or more unique Resx string IDs (name)
 
-Argslist.txt - A program arguments file that lists one or more command line arguments.
- - The file name can be any name as long as it does not have a Resx file extension. 
- - Each line is treated as a command line arg.
+argslist.txt - One or more program arguments file that contains one or more command line arguments.
+ - The file name can be any name.
+ - Each line is treated as a command line arg (see above).
  - Comment (#) and blank lines are ignored.
  - End-of-Line comments are removed.
  - All lines are trimmed to remove leading and trailing spaces.
@@ -22,3 +32,7 @@ Argslist.txt - A program arguments file that lists one or more command line argu
 Windows Wildcard File Search
  - Asterisk (*): Matches any number of characters, including zero.
  - Question mark (?): Matches a single character.
+
+```
+
+   
