@@ -169,5 +169,14 @@ namespace ResxFindStrings
                 serializer.Serialize(writer, tbt);
             }
         }
+
+        public static ToBeTranslatedStrings SerializeFromXml(string filePath)
+        {
+            using (var reader = new XmlTextReader(filePath))
+            {
+                var serializer = new XmlSerializer(typeof(ToBeTranslatedStrings));
+                return (ToBeTranslatedStrings) serializer.Deserialize(reader);
+            }
+        }
     }
 }
